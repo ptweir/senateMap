@@ -79,7 +79,7 @@ for child in root:
                 states.append(grandchildren.attrib['state'])
 states = set(states)
 
-def get_url_cosponsors(inFileName):
+def get_url_title_cosponsors(inFileName):
     inFile = open(inFileName, 'r')
     data = json.loads(inFile.read())
 
@@ -92,7 +92,15 @@ def get_url_cosponsors(inFileName):
         if sponsor.has_key('withdrawn_at') == False or sponsor['withdrawn_at'] is None:
             allSponsorsThomasID.append(sponsor['thomas_id'])
     url = data['url']
-    return url, allSponsorsThomasID
+    title = None
+    for ti in data['titles']:
+        if ti['type']=='short':
+            title = ti['title']
+    if title is None:
+        for ti in data['titles']:
+            if ti['type']=='official':
+                title = ti['title']
+    return url, title, allSponsorsThomasID
 
 
 inDirName = './govtrackdata/congress/113/bills/s/'
@@ -105,12 +113,12 @@ for senateBillDir in senateBillDirs:
     fullPathThisDir = os.path.join(inDirName, senateBillDir)
     if os.path.isdir(fullPathThisDir):
         inFileNameThisBill = os.path.join(fullPathThisDir, 'data.json')
-        urlThisBill, allSponsorsThomasIDs = get_url_cosponsors(inFileNameThisBill)
+        urlThisBill, titleThisBill, allSponsorsThomasIDs = get_url_title_cosponsors(inFileNameThisBill)
 
         billDetails[senateBillDir] = urlThisBill
         for thomasID in senateData.keys():
             if thomasID in allSponsorsThomasIDs:
-                senateData[thomasID]['cosponsoredBills'].append("<a href='"+urlThisBill+"'>"+senateBillDir[1:]+"</a>")
+                senateData[thomasID]['cosponsoredBills'].append("<a href='"+urlThisBill+"' title='"+titleThisBill+"'>"+senateBillDir[1:]+"</a>")
                 #senateData[thomasID]['cosponsoredBills'].append(senateBillDir)
 
 
