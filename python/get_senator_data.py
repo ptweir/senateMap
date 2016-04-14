@@ -75,7 +75,7 @@ for child in root:
     if child.tag == 'person':
         for grandchildren in child:
             if grandchildren.attrib['type']=='sen':
-                senateData[child.attrib['thomasid']] = {'firstName':child.attrib['firstname'], 'lastName':child.attrib['lastname'], 'party':grandchildren.attrib['party'][0], 'state':grandchildren.attrib['state'], 'cosponsoredBills':[]}
+                senateData[child.attrib['thomasid']] = {'firstName':child.attrib['firstname'], 'lastName':child.attrib['lastname'], 'party':grandchildren.attrib['party'][0], 'url':grandchildren.attrib['url'], 'state':grandchildren.attrib['state'], 'cosponsoredBills':[]}
                 states.append(grandchildren.attrib['state'])
 states = set(states)
 
@@ -121,7 +121,7 @@ for st in states:
     cosponsoredBillsThisState = 0
     for tid in thomasIDsThisState:
         cosponsoredBillsThisState += len(senateData[tid]['cosponsoredBills'])
-        dataOut[st]['description'] = dataOut[st]['description']+"<br /><em>"+senateData[tid]['firstName']+' '+senateData[tid]['lastName']+' ('+senateData[tid]['party']+')</em> cosponsored '+str(len(senateData[tid]['cosponsoredBills']))+" Senate bills: "+' '.join(senateData[tid]['cosponsoredBills'])
+        dataOut[st]['description'] = dataOut[st]['description']+"<br /><br /><strong><a href='"+senateData[tid]['url']+"' target='_blank'>"+senateData[tid]['firstName']+' '+senateData[tid]['lastName']+' ('+senateData[tid]['party']+')</a> cosponsored '+str(len(senateData[tid]['cosponsoredBills']))+" Senate bills:</strong> "+' '.join(senateData[tid]['cosponsoredBills'])
         #dataOut[st]['description'] = dataOut[st]['description']+senateData[tid]['firstName']+' '+senateData[tid]['lastName']+' '+str(len(senateData[tid]['cosponsoredBills']))+' '+'; '
 
     dataOut[st]['fillKey'] = str(int(round((cosponsoredBillsThisState-141)/72.)))
