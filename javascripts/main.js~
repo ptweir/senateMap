@@ -12,6 +12,8 @@ var fillColors = {'0': '#FFFFAA',
         defaultFill: '#FFFFDD'
         };
 
+var data = require('senatorData.json');
+
 function showSelected(e) {
     var target = e.target || e.srcElement;
     //rect3text.firstChild.data = data[target.id]["description"];
