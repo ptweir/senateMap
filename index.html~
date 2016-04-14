@@ -17,7 +17,7 @@
     <div id="header_wrap" class="outer">
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/ptweir/senateMap">View on GitHub</a>
-          <a id="breadcrumbs_banner" href="http://ptweir.github.io/">ptweir home</a><a id="breadcrumbs_child" href="http://ptweir.github.io/senateMap/">senateMap</a>
+
           <h1 id="project_title">senateMap</h1>
           <h2 id="project_tagline">An interactive map showing senate activity</h2>
 
