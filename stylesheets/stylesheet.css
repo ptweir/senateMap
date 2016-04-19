@@ -355,6 +355,11 @@ Full-Width Styles
   background: url('../images/icon_download.png') no-repeat 0% 90%;
 }
 
+#credits {
+  color: #999999;
+  font-size: 12px;
+}
+
 .zip_download_link {
   display: block;
   float: right;

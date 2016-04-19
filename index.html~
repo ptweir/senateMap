@@ -9,6 +9,16 @@
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
     <title>senateMap</title>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-72213326-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
   </head>
 
   <body>
@@ -107,6 +117,7 @@
 </svg>
 </p>
 <p id="stateDescription"></p>
+<p id="credits">senateMap uses data collected by <a href="https://www.govtrack.us/">govtrack.us</a>. The original .svg map of the US is from <a href="https://commons.wikimedia.org/wiki/File:Blank_US_Map_%28states_only%29.svg">Wikimedia Commons</a>.</p>
 <script src="javascripts/readData.js"></script>
 <script src="javascripts/main.js"></script>
       
