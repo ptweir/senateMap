@@ -339,7 +339,7 @@ Full-Width Styles
 
 #project_tagline {
   color: #fff;
-  font-size: 24px;
+  font-size: 24px;\
   font-weight: 300;
   background: none;
   text-shadow: #111 0px 0px 10px;
@@ -357,7 +357,11 @@ Full-Width Styles
 
 #credits {
   color: #999999;
-  font-size: 8px;
+  font-size: 12px;
+}
+
+#billList {
+  font-size: 14px;
 }
 
 .zip_download_link {

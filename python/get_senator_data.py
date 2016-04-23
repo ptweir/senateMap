@@ -75,7 +75,7 @@ for child in root:
     if child.tag == 'person':
         for grandchildren in child:
             if grandchildren.attrib['type']=='sen':
-                senateData[child.attrib['thomasid']] = {'firstName':child.attrib['firstname'], 'lastName':child.attrib['lastname'], 'party':grandchildren.attrib['party'][0], 'url':grandchildren.attrib['url'], 'state':grandchildren.attrib['state'], 'cosponsoredBills':[]}
+                senateData[child.attrib['thomasid']] = {'firstName':child.attrib['firstname'], 'lastName':child.attrib['lastname'], 'party':grandchildren.attrib['party'][0], 'url':grandchildren.attrib['url'], 'state':grandchildren.attrib['state'], 'cosponsoredBills':[], 'sponsoredBills':[]}
                 states.append(grandchildren.attrib['state'])
 states = set(states)
 
@@ -84,13 +84,14 @@ def get_url_title_cosponsors(inFileName):
     data = json.loads(inFile.read())
 
     allSponsors = data['cosponsors']
-    allSponsors.append(data['sponsor'])
-
     allSponsorsThomasID = []
 
     for sponsor in allSponsors:
         if sponsor.has_key('withdrawn_at') == False or sponsor['withdrawn_at'] is None:
             allSponsorsThomasID.append(sponsor['thomas_id'])
+    
+    primarySponsorThomasID = data['sponsor']['thomas_id'] 
+
     url = data['url']
     title = None
     for ti in data['titles']:
@@ -100,7 +101,8 @@ def get_url_title_cosponsors(inFileName):
         for ti in data['titles']:
             if ti['type']=='official':
                 title = ti['title']
-    return url, title, allSponsorsThomasID
+
+    return url, title, allSponsorsThomasID, primarySponsorThomasID
 
 
 inDirName = './govtrackdata/congress/113/bills/s/'
@@ -113,13 +115,14 @@ for senateBillDir in senateBillDirs:
     fullPathThisDir = os.path.join(inDirName, senateBillDir)
     if os.path.isdir(fullPathThisDir):
         inFileNameThisBill = os.path.join(fullPathThisDir, 'data.json')
-        urlThisBill, titleThisBill, allSponsorsThomasIDs = get_url_title_cosponsors(inFileNameThisBill)
+        urlThisBill, titleThisBill, allSponsorsThomasIDs, primarySponsorThomasID = get_url_title_cosponsors(inFileNameThisBill)
 
         billDetails[senateBillDir] = urlThisBill
         for thomasID in senateData.keys():
             if thomasID in allSponsorsThomasIDs:
                 senateData[thomasID]['cosponsoredBills'].append("<a href='"+urlThisBill+"' title='"+titleThisBill+"'>"+senateBillDir[1:]+"</a>")
-                #senateData[thomasID]['cosponsoredBills'].append(senateBillDir)
+            if thomasID == primarySponsorThomasID:
+                senateData[thomasID]['sponsoredBills'].append("<a href='"+urlThisBill+"' title='"+titleThisBill+"'>"+titleThisBill+"</a><br />")
 
 
 dataOut = {}
@@ -129,7 +132,7 @@ for st in states:
     cosponsoredBillsThisState = 0
     for tid in thomasIDsThisState:
         cosponsoredBillsThisState += len(senateData[tid]['cosponsoredBills'])
-        dataOut[st]['description'] = dataOut[st]['description']+"<br /><br /><strong><a href='"+senateData[tid]['url']+"' target='_blank'>"+senateData[tid]['firstName']+' '+senateData[tid]['lastName']+' ('+senateData[tid]['party']+')</a> cosponsored '+str(len(senateData[tid]['cosponsoredBills']))+" Senate bills:</strong> "+' '.join(senateData[tid]['cosponsoredBills'])
+        dataOut[st]['description'] = dataOut[st]['description']+"<br /><br /><strong><a href='"+senateData[tid]['url']+"' target='_blank'>"+senateData[tid]['firstName']+' '+senateData[tid]['lastName']+' ('+senateData[tid]['party']+')</a></strong> sponsored '+str(len(senateData[tid]['sponsoredBills']))+' Senate bills:<br /><br /><div id="billList">'+' '.join(senateData[tid]['sponsoredBills'])+'<br />and cosponsored '+str(len(senateData[tid]['cosponsoredBills']))+' Senate bills: '+' '.join(senateData[tid]['cosponsoredBills'])+'</div>'
         #dataOut[st]['description'] = dataOut[st]['description']+senateData[tid]['firstName']+' '+senateData[tid]['lastName']+' '+str(len(senateData[tid]['cosponsoredBills']))+' '+'; '
 
     dataOut[st]['fillKey'] = str(int(round((cosponsoredBillsThisState-141)/72.)))
