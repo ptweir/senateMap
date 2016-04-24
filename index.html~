@@ -44,8 +44,15 @@
         <h3>
 <a id="what-legislation-has-your-senator-co-sponsored" class="anchor" href="#what-legislation-has-your-senator-co-sponsored" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What legislation has your senator co-sponsored?</h3>
 
-<p>Track the activity of your senators in the 113th congress by clicking on this interactive map.</p>
-      <p>
+<p>Track the activity of your senators by clicking on this interactive map.</p>
+<p>
+Select which session you are interested in: <select id="congressSelect" name="congressSelect"> 
+<option value="" selected=true>Please select</option>
+<option value="112">112 (2011-2013)</option>
+<option value="113">113 (2013-2015</option>
+</select>
+</p>
+<p>
       
       
         <svg width="600px" height="400px" viewBox="174 100 959 593" preserveAspectRatio="xMidYMin meet" id="map">
@@ -117,7 +124,7 @@
 </svg>
 </p>
 <p id="stateDescription"></p>
-<p id="credits">senateMap uses data collected by <a href="https://www.govtrack.us/">govtrack.us</a>. The original .svg map of the US is from <a href="https://commons.wikimedia.org/wiki/File:Blank_US_Map_%28states_only%29.svg">Wikimedia Commons</a>.</p>
+<p id="credits">senateMap uses data collected by <a href="https://www.govtrack.us/" target="_blank">govtrack.us</a>. The original .svg map of the US is from <a href="https://commons.wikimedia.org/wiki/File:Blank_US_Map_%28states_only%29.svg" target="_blank">Wikimedia Commons</a>.</p>
 <script src="javascripts/readData.js"></script>
 <script src="javascripts/main.js"></script>
       

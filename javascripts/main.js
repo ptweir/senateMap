@@ -1,5 +1,3 @@
-
-
 var fillColors = {'0': '#FFFFAA',
         '1': '#DDFFAA',
         '2': '#BBFFAA',
@@ -35,9 +33,30 @@ function unselect(e) {
     //document.getElementById("stateDescription").innerHTML = "";
 };
 
+function nothing(e) {
+};
+
+function menuChanged(e) {
+    var congressNum = this.value;
+    if (congressNum=="") {states='';} // nothing selected
+    if (congressNum=="112") {
+       var head= document.getElementsByTagName('head')[0];
+       var script= document.createElement('script');
+       script.type= 'text/javascript';
+       script.src= 'javascripts/readData112.js';
+       head.appendChild(script);
+      }
+    if (congressNum=="113") {
+       var head= document.getElementsByTagName('head')[0];
+       var script= document.createElement('script');
+       script.type= 'text/javascript';
+       script.src= 'javascripts/readData.js';
+       head.appendChild(script);
+      }
+
 var m = document.getElementById("map");
 var states = m.getElementsByClassName("state");
-
+if ((congressNum=="112") | (congressNum=="113")) {
 for (var i = 0; i < states.length; i++) {
     //states[i].style.fill = "#333300";
     states[i].style.fill = fillColors[data[states[i].id]["fillKey"]];
@@ -47,6 +66,21 @@ for (var i = 0; i < states.length; i++) {
     states[i].onmouseout = unselect;
     states[i].onclick = selectState;
     };
+}
+else {
+for (var i = 0; i < states.length; i++) {
+    states[i].style.fill = "#D3D3D3";
+    states[i].style.stroke = "#ffffff";
+    states[i].onmouseover = nothing;
+    states[i].onmouseout = nothing;
+    states[i].onclick = nothing;
+};
+}
+document.getElementById("stateDescription").innerHTML = '';
+return;
+}
+
+document.getElementById("congressSelect").onchange = menuChanged;
 
 var m = document.getElementById("map");
 var legendBoxes = m.getElementsByClassName("legendBox");

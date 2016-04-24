@@ -64,7 +64,8 @@ stateFullNames = {
 }
 
 
-inFileName = './govtrackdata/us/113/people.xml'
+inFileName = './govtrackdata/us/112/people.xml'
+#inFileName = './govtrackdata/us/113/people.xml'
 
 senateData = {}
 states = []
@@ -75,8 +76,17 @@ for child in root:
     if child.tag == 'person':
         for grandchildren in child:
             if grandchildren.attrib['type']=='sen':
-                senateData[child.attrib['thomasid']] = {'firstName':child.attrib['firstname'], 'lastName':child.attrib['lastname'], 'party':grandchildren.attrib['party'][0], 'url':grandchildren.attrib['url'], 'state':grandchildren.attrib['state'], 'cosponsoredBills':[], 'sponsoredBills':[]}
-                states.append(grandchildren.attrib['state'])
+                try:
+                    url = grandchildren.attrib['url']
+                except KeyError:
+                    url = 'http://www.google.com/search?q='+child.attrib['firstname']+'+'+child.attrib['lastname']+'+'+grandchildren.attrib['state']
+                    print 'No url, using', url
+                try:
+                    tid = child.attrib['thomasid']
+                    senateData[tid] = {'firstName':child.attrib['firstname'], 'lastName':child.attrib['lastname'], 'party':grandchildren.attrib['party'][0], 'url':url, 'state':grandchildren.attrib['state'], 'cosponsoredBills':[], 'sponsoredBills':[]}
+                    states.append(grandchildren.attrib['state'])
+                except KeyError:
+                    print child.attrib['firstname'], child.attrib['lastname'], ' Did not serve long enough to be assigned a thomasID?'
 states = set(states)
 
 def get_url_title_cosponsors(inFileName):
@@ -91,8 +101,6 @@ def get_url_title_cosponsors(inFileName):
             allSponsorsThomasID.append(sponsor['thomas_id'])
     
     primarySponsorThomasID = data['sponsor']['thomas_id'] 
-
-    url = data['url']
     title = None
     for ti in data['titles']:
         if ti['type']=='short':
@@ -101,11 +109,14 @@ def get_url_title_cosponsors(inFileName):
         for ti in data['titles']:
             if ti['type']=='official':
                 title = ti['title']
-
+    try:
+        url = data['url']
+    except KeyError:
+        url = 'https://www.govtrack.us/congress/bills/'+inFileNameThisBill.split('/')[-5]+'/'+inFileNameThisBill.split('/')[-2]
     return url, title, allSponsorsThomasID, primarySponsorThomasID
 
-
-inDirName = './govtrackdata/congress/113/bills/s/'
+inDirName = './govtrackdata/congress/112/bills/s/'
+#inDirName = './govtrackdata/congress/113/bills/s/'
 senateBillDirs = os.listdir(inDirName)
 senateBillDirs.sort(key=natural_sort_key)
 
@@ -137,7 +148,7 @@ for st in states:
 
     dataOut[st]['fillKey'] = str(int(round((cosponsoredBillsThisState-141)/72.)))
 
-outFileName = 'readData.js'
+outFileName = 'readData112.js'
 outFile = open(outFileName, 'w')
 outFile.write("var data = ")
 json.dump(dataOut, outFile)
