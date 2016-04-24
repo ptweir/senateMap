@@ -47,7 +47,7 @@
 <p>Track the activity of your senators by clicking on this interactive map.</p>
 <p>
 Select which session you are interested in: <select id="congressSelect" name="congressSelect"> 
-<option value="" selected=true>Please select</option>
+<option value="" selected="selected">Please select</option>
 <option value="112">112 (2011-2013)</option>
 <option value="113">113 (2013-2015</option>
 </select>
